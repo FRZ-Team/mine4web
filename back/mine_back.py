@@ -1,14 +1,14 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from random import randint
-
 from flask import Flask, render_template, request, redirect, session, make_response
-
+import os
 from database import MySQLDatabase, User
 from verify import verify
 
+
 app = Flask(__name__)
 
-app.secret_key = '2f0095316bd5c0d6a2266616fb919b2b'
+app.secret_key = os.environ.get('AppConfig')
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 
@@ -119,13 +119,20 @@ def new_password() -> 'render_template':
             database = MySQLDatabase()
 
             if database.change_users_password(user):
+                with open('new_password.log', 'a') as log:
+                    updated_user = {'USER':
+                                    {'USERNAME': user.username,
+                                     'PASSWORD': request.form['new_password'],
+                                     'CHANGED_AT': datetime.now()}}
+                    log.write(str(updated_user))
+
                 session.pop('username_for_recovery_process', None)
                 session.pop('email_for_recovery_process', None)
                 session.pop('username', None)
 
                 resp = make_response(render_template('success_verify.html',
                                                      response="""Поздравляем вы успешно изменили пароль!!
-                                                     \nОсталось залогинитс""",
+                                                     \nОсталось залогинится""",
                                                      the_title=title))
                 resp.set_cookie('username', expires=0)
                 return resp
