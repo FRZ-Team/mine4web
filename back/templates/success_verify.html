@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{%block title%}{{the_title}}{% endblock %}
+
+{% block content %}
+
+  <header>
+        <div id="logo1" onclick="slowScroll('#top')">
+            <span><a class="logo_regist" href="/homepage">McGrief</a></span>
+        </div>
+        <div id = "about1">
+            <a href="/about_us" title="О нас" onclick="slowScroll('#main')">О нас</a>
+            <a href="/news" title="Новости" onclick="slowScroll('#main')">Новости</a>
+            <a href="/login" title="Логин" onclick="slowScroll('#main')">Логин</a>
+            <a href = "/registration_page" title="Регистрация" onclick="slowScroll('#contacts')">Регистрация</a>
+            <a href = "/profile" title="Личный кабинет" onclick="slowScroll('#contacts')">Личный кабинет</a>
+            <a href="/homepage" title="Вернуться" onclick="slowScroll('#main')">Вернуться на главную</a>
+        </div>
+    </header>
+
+    <div id="success_verify">
+        <h1>вы удачно сменили пароль!</h1>
+        <span>чтоб вернуться в личный кабинет или на главную нажмите по ссылке ниже или выше</span>
+        <br>
+        <a href="/profile">Личный кабинет</a>
+        <br>
+        <br>
+        <a href="/homepage">Вернуться на главную</a>
+        <br>
+        <p>{{ response }}</p>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function slowScroll()
+        {
+            $('html,body').animate({
+                scrollTop: $(id).offset().top
+            },500)
+        }
+        $(document).on("scroll",function(){
+            if($(window).scrollTop() === 0)
+                $("header").removeClass("fixed");
+            else
+                $("header").attr("class","fixed");
+        })
+    </script>
+
+
+{% endblock %}

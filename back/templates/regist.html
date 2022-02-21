@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+{%block title%}{{the_title}}{% endblock %}
+
+{% block content %}
+   <header>
+        <div id="logo1" onclick="slowScroll('#top')">
+            <span><a class="logo_regist" href="/homepage">McGrief</a></span>
+        </div>
+        <div id = "about1">
+            <a href="/about_us" title="О нас" onclick="slowScroll('#main')">О нас</a>
+            <a href="/news" title="Новости" onclick="slowScroll('#main')">Новости</a>
+            <a href="/login" title="Логин" onclick="slowScroll('#main')">Логин</a>
+            <a href = "/registration_page" title="Регистрация" onclick="slowScroll('#contacts')">Регистрация</a>
+            <a href = "/profile" title="Личный кабинет" onclick="slowScroll('#contacts')">Личный кабинет</a>
+            <a href="/homepage" title="Вернуться" onclick="slowScroll('#main')">Вернуться на главную</a>
+        </div>
+    </header>
+
+
+
+    <div id="contacts">
+        <center><h5>Регистрация</h5></center>
+        <form  id="form_input" method="POST" action="/registration_page">
+            <div class="input-control">
+                <label for = "name">Имя<span>*</span></label><br>
+                <input type="text" placeholder="Введите имя" name = "username" id ="name">
+                <div class="error"></div>
+            </div>
+
+            <br>
+            <div class="input-control">
+                <label for = "name">Пароль<span>*</span></label><br>
+                <input type="password" placeholder="Введите Пароль" name = "password" id ="password">
+                <div class="error"></div>
+            </div>
+
+            <br>
+
+            <div class="input-control">
+                <label for = "name">Повторный пароль<span>*</span></label><br>
+                <input type="password" placeholder="Введите пароль" name = "passwordagain" id ="passwordagain">
+            <div class="error"></div>
+            </div>
+
+            <br>
+
+            <div class="input-control">
+                <label for = "email">Ваша почта<span>*</span></label><br>
+                <input type="email" placeholder="Введите почту" name = "email" id= "email">
+                <div class="error"><p>{{ response }}</p></div>
+            </div>
+            <br>
+
+
+            <button id="mess_send" class="btn" type="submit">Отправить</button><br>
+            <br>
+
+
+
+        </form>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function slowScroll()
+        {
+            $('html,body').animate({
+                scrollTop: $(id).offset().top
+            },500)
+        }
+        $(document).on("scroll",function(){
+            if($(window).scrollTop() === 0)
+                $("header").removeClass("fixed");
+            else
+                $("header").attr("class","fixed");
+        })
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+
+{% endblock %}
+
+
+
