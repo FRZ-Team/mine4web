@@ -5,7 +5,6 @@ import os
 from database import MySQLDatabase, User
 from verify import verify
 
-
 app = Flask(__name__)
 
 app.secret_key = os.environ.get('AppConfig')
@@ -121,9 +120,9 @@ def new_password() -> 'render_template':
             if database.change_users_password(user):
                 with open('new_password.log', 'a') as log:
                     updated_user = {'USER':
-                                    {'USERNAME': user.username,
-                                     'PASSWORD': request.form['new_password'],
-                                     'CHANGED_AT': datetime.now()}}
+                                        {'USERNAME': user.username,
+                                         'PASSWORD': request.form['new_password'],
+                                         'CHANGED_AT': datetime.now()}}
                     log.write(str(updated_user))
 
                 session.pop('username_for_recovery_process', None)
@@ -191,15 +190,15 @@ def profile() -> 'session':
 
 @app.route('/shop')
 def shop():
-    return render_template('shop.html',
-                           the_title=title)
+
+    return render_template('shop.html')
 
 
-@app.route('/shopping_cart')
-def shopping_cart():
-    if session['username']:
-        return render_template('shopping_cart',
-                               the_title=title)
+@app.route('/checkout')
+def checkout():
+    if request.cookies.get('username'):
+        return render_template('checkout.html',
+                               sum='200')
 
     else:
         return render_template('no_access.html',
