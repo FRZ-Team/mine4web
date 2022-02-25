@@ -2,8 +2,9 @@ from datetime import timedelta, datetime
 from random import randint
 from flask import Flask, render_template, request, redirect, session, make_response
 import os
-from database import MySQLDatabase, User
+from database import MySQLDatabase, User, Root
 from verify import verify
+from shop_table import Stock, Shop
 
 app = Flask(__name__)
 
@@ -16,6 +17,22 @@ COOKIE_TIME_OUT = 60 * 60 * 24 * 7
 dangerous_symbols = {"'", '"', '<', '>', '{', '}'}
 
 title = 'McGrief'
+
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admins_page():
+    if request.method == 'GET':
+        if request.cookies.get('username') == 'admin':
+            return render_template('administration_page.html')
+        else:
+            redirect('/')
+
+    if request.method == 'POST':
+        to_stock = Stock(item=request.form['item'], price=request.form['price'])
+        shop = Shop()
+        shop.add_new_item(to_stock)
+        return render_template('administration_page.html',
+                               response='item successfully added')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -176,9 +193,11 @@ def profile() -> 'session':
             user = User(username=login_user)
             database = MySQLDatabase()
             in_database = MySQLDatabase()
+            root = Root()
 
             return render_template('profile.html',
                                    the_title='McGrief',
+                                   root=root.show_roots(user),
                                    username=login_user,
                                    registration_date=database.registration_date(user),
                                    login_date=in_database.last_login_date(user))
@@ -190,19 +209,41 @@ def profile() -> 'session':
 
 @app.route('/shop')
 def shop():
-
     return render_template('shop.html')
 
 
-@app.route('/checkout')
-def checkout():
-    if request.cookies.get('username'):
-        return render_template('checkout.html',
-                               sum='200')
+@app.route('/checkout/<price>/<item>')
+def checkout(price, item):
+    in_stock = Stock(price=price, item=item)
+    print(price, item)
+    shop_item = Shop()
+    if shop_item.check_if_item_exists(in_stock):
+        if request.cookies.get('username'):
+            session['paying'] = item
+            return render_template('checkout.html',
+                                   sum=price)
+
+        else:
+            return render_template('no_access.html',
+                                   the_title=title)
 
     else:
-        return render_template('no_access.html',
-                               the_title=title)
+        return redirect('/shop')
+
+
+@app.route('/thanks')
+def thanks():
+    try:
+        if session['paying']:
+            root = session['paying']
+            update_root = User(username=request.cookies.get('username'), root=root)
+            root = Root()
+            root.set_roots(update_root)
+            session.pop('paying', None)
+            return render_template('thanks.html')
+
+    except KeyError:
+        return redirect('/shop')
 
 
 @app.route('/registration_page', methods=['GET', 'POST'])

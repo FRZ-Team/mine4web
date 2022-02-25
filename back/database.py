@@ -8,11 +8,12 @@ DBCONFIG = {'host': '127.0.0.1',
 
 
 class User:
-    def __init__(self, username='', password='', email='', ip=''):
-        self.username = username
-        self.password = md5(password.encode('utf-8')).hexdigest()
-        self.email = email
-        self.ip = ip
+    def __init__(self, username='', password='', email='', ip='', root=''):
+        self.username = username.rstrip()
+        self.password = md5(password.encode('utf-8')).hexdigest().rstrip()
+        self.email = email.rstrip()
+        self.ip = ip.rstrip()
+        self.root = root.rstrip()
 
 
 class MySQLDatabase:
@@ -32,7 +33,8 @@ class MySQLDatabase:
         # register if it is a new user
         else:
             self.cursor.execute(f"""insert into users (username, password, email, ip)
-                                    values ('{user.username}', '{user.password}', '{user.email}', '{user.ip}')""")
+                                    values 
+                                    ('{user.username}', '{user.password}', '{user.email}', '{user.ip}')""")
 
             self.conn.commit()
             return 'user successfully added'
@@ -57,5 +59,16 @@ class MySQLDatabase:
 
     def last_login_date(self, user: User):
         self.cursor.execute(f"SELECT lastLogin FROM users WHERE username = '{user.username}'")
+        for row in self.cursor.fetchall():
+            return row[0]
+
+
+class Root(MySQLDatabase):
+
+    def set_roots(self, user: User):
+        self.cursor.execute(f"""UPDATE users SET roots = '{user.root}' WHERE username = '{user.username}'""")
+
+    def show_roots(self, user: User):
+        self.cursor.execute(f"SELECT roots FROM users WHERE username = '{user.username}'")
         for row in self.cursor.fetchall():
             return row[0]
