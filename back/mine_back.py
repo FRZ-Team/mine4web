@@ -22,7 +22,7 @@ title = 'McGrief'
 @app.route('/admin', methods=['GET', 'POST'])
 def admins_page():
     if request.method == 'GET':
-        if request.cookies.get('username') == 'admin':
+        if request.cookies.get('username').rstrip() == 'admin':
             return render_template('administration_page.html')
         else:
             redirect('/')
@@ -228,7 +228,7 @@ def checkout(price, item):
                                    the_title=title)
 
     else:
-        return redirect('/shop')
+        return render_template('no_access.html')
 
 
 @app.route('/thanks')
@@ -310,4 +310,4 @@ def response_404(error) -> 'render_template':
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1')
+    app.run(debug=True, host='192.168.1.248')

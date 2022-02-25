@@ -2,9 +2,9 @@ from database import MySQLDatabase
 
 
 class Stock:
-    def __init__(self, price, item):
-        self.price = price
-        self.item = item
+    def __init__(self, price='', item=''):
+        self.price = price.rstrip()
+        self.item = item.rstrip()
 
 
 class Shop(MySQLDatabase):

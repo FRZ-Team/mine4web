@@ -2,48 +2,54 @@
 {%block title%}{{the_title}}{% endblock %}
 
 {% block content %}
-<header>
+<!--Header------------------------------------->
+    <header id="header" class="lock-padding">
         <div id="logo" onclick="slowScroll('#top')">
-            <span>McGrief</span>
+            <span><a href="/homepage">McGrief</a></span>
         </div>
         <div id = "about">
-            <a href="/about_us" title="О нас" onclick="slowScroll('#main')">О нас</a>
+           <a href="/about_us" title="О нас" onclick="slowScroll('#main')">О нас</a>
             <a href="/news" title="Новости" onclick="slowScroll('#main')">Новости</a>
             <a href="/login" title="Логин" onclick="slowScroll('#main')">Логин</a>
-            <a href = "/registration_page" title="Регистрация" onclick="slowScroll('#contacts')">Регистрация</a>
+            <a href = "registration_page" title="Регистрация" onclick="slowScroll('#contacts')">Регистрация</a>
+            <a href = "/shop" title="Магазин" onclick="slowScroll('#contacts')">Магазин</a>
             <a href = "/profile" title="Личный кабинет" onclick="slowScroll('#contacts')">Личный кабинет</a>
         </div>
+        <div id="header-phone">
+            <a href="#popup-block-menu" class="popup-link"><img src="static/hamburger-menu-icon-png-white-10.jpg"></a>
+        </div>
     </header>
-
+<!--top2------------------------------------->
     <div id = "top2">
         <h1>McGrief</h1>
         <h3>Лучший майнкрафт сервер!</h3>
         <div id = "welcome">
-            <p class="hi">{{ response }}</p>
+            <p class="hi">{{response}}</p>
             <a href="/profile">личный кабинет</a>
+
         </div>
         <a href="/logout" class="exitAc">выйти</a>
     </div>
 
-
+<!--main------------------------------------->
     <div id="main">
         <div class="intro">
             <h2>McGrief</h2>
             <span>IP Adress:MCGRIEF.aternos.me</span>
-
         </div>
         <div class="text">
             <span>На нашем сервере вы сможете выживать,гриферить,находить напарников и путешествовать в месте!</span>
         </div>
     </div>
 
-
+<!--overview------------------------------------->
     <div id="overview">
         <h2>Заходи на наш дискорд сервер!</h2>
         <div class="img">
             <a href="https://discord.gg/7QQgVHqJ5j"><img src="static/7O9AMX_1.png" alt=""></a>
         </div>
     </div>
+<!--section------------------------------------->
     <section>
         <h2 class="FaqT">FAQS </h2>
 
@@ -156,7 +162,38 @@
         </div>
     </section>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!--menu-popup------------------------------------->
+     <div class="popup-block" id="popup-block-menu">
+        <div class="popup-block-body">
+            <div class="popup-block-content">
+                <a href = "#header" class="popup-block-close" id="pop_up_close">X</a>
+                <div class="popup-title">Меню</div>
+                <div class="popup-text">
+                     <a href="/about_us" title="О нас" onclick="slowScroll('#main')">О нас</a>
+                    <br>
+                    <br>
+                    <a href="/news" title="Новости" onclick="slowScroll('#main')">Новости</a>
+                    <br>
+                    <br>
+                    <a href="/login" title="Логин" onclick="slowScroll('#main')">Логин</a>
+                    <br>
+                    <br>
+                    <a href = "/registration_page" title="Регистрация" onclick="slowScroll('#main')">Регистрация</a>
+                    <br>
+                    <br>
+                    <a href = "/shop" title="Магазин" onclick="slowScroll('#main')">Магазин</a>
+                    <br>
+                    <br>
+                    <a href = "/profile" title="Личный кабинет" onclick="slowScroll('#main')">Личный кабинет</a>
+                    <br>
+                    <br>
+                    <a href="/homepage" title="Вернуться" onclick="slowScroll('#main')">Вернуться на главную</a>
+                </div>
+                </div>
+            </div>
+        </div>
+
+<!--script------------------------------------->
     <script>
 
          function slowScroll()
@@ -181,4 +218,5 @@
             })
         })
     </script>
+     <script src="static/popup.js"></script>
 {% endblock %}
